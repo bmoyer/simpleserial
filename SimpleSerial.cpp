@@ -1,5 +1,7 @@
 #include "SimpleSerial.h"
 
+using namespace boost;
+
 void SimpleSerial::open(std::string portName, long baud, int byteSize, 
         Parity parity, StopBits stopBits,
         FlowControl flowControl)
@@ -9,7 +11,7 @@ void SimpleSerial::open(std::string portName, long baud, int byteSize,
 
     // Set all serial port properties
     port->set_option(asio::serial_port_base::baud_rate(baud));
-    port->set_option(boost::asio::serial_port_base::character_size(byteSize));
+    port->set_option(asio::serial_port_base::character_size(byteSize));
     set_parity(parity);
     set_stop_bits(stopBits);
     set_flow_control(flowControl);
@@ -17,20 +19,20 @@ void SimpleSerial::open(std::string portName, long baud, int byteSize,
 
 void SimpleSerial::set_flow_control(FlowControl flowControl)
 {
-    boost::asio::serial_port_base::flow_control::type flowControlType;
+    asio::serial_port_base::flow_control::type flowControlType;
     switch(flowControl)
     {
         case FLOW_CONTROL_NONE:
-            flowControlType = boost::asio::serial_port_base::flow_control::none;
+            flowControlType = asio::serial_port_base::flow_control::none;
             break;
         case FLOW_CONTROL_SOFTWARE:
-            flowControlType = boost::asio::serial_port_base::flow_control::software;
+            flowControlType = asio::serial_port_base::flow_control::software;
             break;
         case FLOW_CONTROL_HARDWARE:
-            flowControlType = boost::asio::serial_port_base::flow_control::hardware;
+            flowControlType = asio::serial_port_base::flow_control::hardware;
             break;
     }
-    port->set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
+    port->set_option(asio::serial_port_base::flow_control(asio::serial_port_base::flow_control::none));
 }
 
 void SimpleSerial::set_stop_bits(StopBits stopBits)
@@ -39,16 +41,16 @@ void SimpleSerial::set_stop_bits(StopBits stopBits)
     switch(stopBits)
     {
         case STOPBITS_ONE:
-            stopBitsType = boost::asio::serial_port_base::stop_bits::one;
+            stopBitsType = asio::serial_port_base::stop_bits::one;
             break;
         case STOPBITS_ONE_POINT_FIVE:
-            stopBitsType = boost::asio::serial_port_base::stop_bits::onepointfive;
+            stopBitsType = asio::serial_port_base::stop_bits::onepointfive;
             break;
         case STOPBITS_TWO:
-            stopBitsType = boost::asio::serial_port_base::stop_bits::two;
+            stopBitsType = asio::serial_port_base::stop_bits::two;
             break;
     }
-    port->set_option(boost::asio::serial_port_base::stop_bits(stopBitsType));
+    port->set_option(asio::serial_port_base::stop_bits(stopBitsType));
 }
 
 void SimpleSerial::set_parity(Parity parity)
@@ -66,7 +68,7 @@ void SimpleSerial::set_parity(Parity parity)
             parityType = asio::serial_port_base::parity::none;
             break;
     }
-    port->set_option(boost::asio::serial_port_base::parity(parityType));
+    port->set_option(asio::serial_port_base::parity(parityType));
 }
 
 void SimpleSerial::close()
@@ -91,15 +93,15 @@ void SimpleSerial::flush_both_buffers()
 
 void SimpleSerial::flush(int flushBuffer)
 {
-    boost::system::error_code error;
+    system::error_code error;
     if(0 == ::tcflush(port->lowest_layer().native_handle(), flushBuffer))
     {
-        error = boost::system::error_code();
+        error = system::error_code();
     }
     else
     {
-        error = boost::system::error_code(errno,
-                boost::asio::error::get_system_category());
+        error = system::error_code(errno,
+                asio::error::get_system_category());
     }
 }
 

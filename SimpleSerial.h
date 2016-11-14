@@ -5,8 +5,6 @@
 #include <stdio.h>
 #include <string>
 
-using namespace boost;
-
 enum Parity { 
     PARITY_EVEN,
     PARITY_ODD,
@@ -56,8 +54,8 @@ public:
 private:
     void flush(int flushBuffer);
 
-    asio::io_service io;
-    std::unique_ptr<asio::serial_port> port;
+    boost::asio::io_service io;
+    std::unique_ptr<boost::asio::serial_port> port;
 
 };
 
