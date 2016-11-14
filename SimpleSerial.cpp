@@ -13,6 +13,18 @@ enum Parity {
     PARITY_NONE
 };
 
+enum StopBits {
+    STOPBITS_ONE,
+    STOPBITS_ONE_POINT_FIVE,
+    STOPBITS_TWO
+};
+
+enum FlowControl {
+    FLOW_CONTROL_NONE,
+    FLOW_CONTROL_SOFTWARE,
+    FLOW_CONTROL_HARDWARE
+};
+
 class SerialPort {
     public:
 
@@ -20,17 +32,54 @@ class SerialPort {
         asio::serial_port* port;
 
         void open(std::string portName, long baud = 9600, int byteSize = 8, 
-                Parity parity = PARITY_NONE)
+                Parity parity = PARITY_NONE, StopBits stopBits = STOPBITS_ONE,
+                FlowControl flowControl = FLOW_CONTROL_NONE)
         {
             port = new asio::serial_port(io);
             port->open(portName);
+            
+            // Set all serial port properties
             port->set_option(asio::serial_port_base::baud_rate(baud));
-
             port->set_option(boost::asio::serial_port_base::character_size(byteSize));
-            //port_->set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
             setParity(parity);
-            //port_->set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
-            //port_->set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
+            setStopBits(stopBits);
+            setFlowControl(flowControl);
+        }
+
+        void setFlowControl(FlowControl flowControl)
+        {
+            boost::asio::serial_port_base::flow_control::type flowControlType;
+            switch(flowControl)
+            {
+                case FLOW_CONTROL_NONE:
+                    flowControlType = boost::asio::serial_port_base::flow_control::none;
+                    break;
+                case FLOW_CONTROL_SOFTWARE:
+                    flowControlType = boost::asio::serial_port_base::flow_control::software;
+                    break;
+                case FLOW_CONTROL_HARDWARE:
+                    flowControlType = boost::asio::serial_port_base::flow_control::hardware;
+                    break;
+            }
+            port->set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
+        }
+
+        void setStopBits(StopBits stopBits)
+        {
+            asio::serial_port_base::stop_bits::type stopBitsType;
+            switch(stopBits)
+            {
+                case STOPBITS_ONE:
+                    stopBitsType = boost::asio::serial_port_base::stop_bits::one;
+                    break;
+                case STOPBITS_ONE_POINT_FIVE:
+                    stopBitsType = boost::asio::serial_port_base::stop_bits::onepointfive;
+                    break;
+                case STOPBITS_TWO:
+                    stopBitsType = boost::asio::serial_port_base::stop_bits::two;
+                    break;
+            }
+            port->set_option(boost::asio::serial_port_base::stop_bits(stopBitsType));
         }
 
         void setParity(Parity parity)
