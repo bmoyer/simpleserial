@@ -26,8 +26,6 @@ enum FlowControl {
 };
 
 class SimpleSerial {
-    asio::io_service io;
-    asio::serial_port* port;
 
 public:
 
@@ -57,6 +55,9 @@ public:
 
 private:
     void flush(int flushBuffer);
+
+    asio::io_service io;
+    std::unique_ptr<asio::serial_port> port;
 
 };
 

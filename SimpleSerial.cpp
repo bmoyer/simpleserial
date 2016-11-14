@@ -4,7 +4,7 @@ void SimpleSerial::open(std::string portName, long baud, int byteSize,
         Parity parity, StopBits stopBits,
         FlowControl flowControl)
 {
-    port = new asio::serial_port(io);
+    port = std::unique_ptr<asio::serial_port>(new asio::serial_port(io));
     port->open(portName);
 
     // Set all serial port properties
@@ -115,7 +115,6 @@ int SimpleSerial::write_line(std::string data)
 
 std::string SimpleSerial::read(int numBytes)
 {
-    //std::string data;
     char data[numBytes];
     asio::read(*port, asio::buffer(&data,numBytes));
     return data;
