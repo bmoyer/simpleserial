@@ -26,7 +26,6 @@ enum FlowControl {
 class SimpleSerial {
 
 public:
-
     void open(std::string portName, long baud = 9600, int byteSize = 8, 
             Parity parity = PARITY_NONE, StopBits stopBits = STOPBITS_ONE,
             FlowControl flowControl = FLOW_CONTROL_NONE);
