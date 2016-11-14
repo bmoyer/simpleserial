@@ -31,6 +31,7 @@ public:
             Parity parity = PARITY_NONE, StopBits stopBits = STOPBITS_ONE,
             FlowControl flowControl = FLOW_CONTROL_NONE);
     void close();
+    bool is_open();
 
     // Write methods
     int write(std::string data);

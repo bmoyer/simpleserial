@@ -17,6 +17,11 @@ void SimpleSerial::open(std::string portName, long baud, int byteSize,
     set_flow_control(flowControl);
 }
 
+bool SimpleSerial::is_open()
+{
+    return port->is_open();
+}
+
 void SimpleSerial::set_flow_control(FlowControl flowControl)
 {
     asio::serial_port_base::flow_control::type flowControlType;
