@@ -36,6 +36,9 @@ void SimpleSerial::set_flow_control(FlowControl flowControl)
         case FLOW_CONTROL_HARDWARE:
             flowControlType = asio::serial_port_base::flow_control::hardware;
             break;
+        default:
+            assert(0); // invalid flow control type!
+            break;
     }
     port->set_option(asio::serial_port_base::flow_control(asio::serial_port_base::flow_control::none));
 }
@@ -54,6 +57,9 @@ void SimpleSerial::set_stop_bits(StopBits stopBits)
         case STOPBITS_TWO:
             stopBitsType = asio::serial_port_base::stop_bits::two;
             break;
+        default:
+            assert(0); // invalid stop bits!
+            break;
     }
     port->set_option(asio::serial_port_base::stop_bits(stopBitsType));
 }
@@ -71,6 +77,9 @@ void SimpleSerial::set_parity(Parity parity)
             break;
         case PARITY_NONE:
             parityType = asio::serial_port_base::parity::none;
+            break;
+        default:
+            assert(0); // invalid parity type!
             break;
     }
     port->set_option(asio::serial_port_base::parity(parityType));

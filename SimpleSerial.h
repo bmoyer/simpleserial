@@ -51,12 +51,10 @@ public:
     void set_stop_bits(StopBits stopBits);
     void set_parity(Parity parity);
 
-
 private:
     void flush(int flushBuffer);
 
     boost::asio::io_service io;
     std::unique_ptr<boost::asio::serial_port> port;
-
 };
 
