@@ -2,18 +2,18 @@
 
 int main()
 {
-    SimpleSerial p;
-    p.open("/dev/ttyACM0", 115200);
+    SimpleSerial serial;
+    serial.open("/dev/ttyACM0", 115200);
     usleep(1000000);
 
-    p.flush_both_buffers();
+    serial.flush_both_buffers();
     for(int i = 0; i < 20; i++)
     {
-        p.write_line("foo " + std::to_string(i*10000));
-        std::cout << p.read_line();
+        serial.write_line("xfoo " + std::to_string(i*10000));
+        std::cout << serial.read_line();
     }
 
-    p.close();
+    serial.close();
 
     return 0;
 }
