@@ -10,12 +10,12 @@ void SimpleSerial::open(std::string portName, long baud, int byteSize,
     // Set all serial port properties
     port->set_option(asio::serial_port_base::baud_rate(baud));
     port->set_option(boost::asio::serial_port_base::character_size(byteSize));
-    setParity(parity);
-    setStopBits(stopBits);
-    setFlowControl(flowControl);
+    set_parity(parity);
+    set_stop_bits(stopBits);
+    set_flow_control(flowControl);
 }
 
-void SimpleSerial::setFlowControl(FlowControl flowControl)
+void SimpleSerial::set_flow_control(FlowControl flowControl)
 {
     boost::asio::serial_port_base::flow_control::type flowControlType;
     switch(flowControl)
@@ -33,7 +33,7 @@ void SimpleSerial::setFlowControl(FlowControl flowControl)
     port->set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
 }
 
-void SimpleSerial::setStopBits(StopBits stopBits)
+void SimpleSerial::set_stop_bits(StopBits stopBits)
 {
     asio::serial_port_base::stop_bits::type stopBitsType;
     switch(stopBits)
@@ -51,7 +51,7 @@ void SimpleSerial::setStopBits(StopBits stopBits)
     port->set_option(boost::asio::serial_port_base::stop_bits(stopBitsType));
 }
 
-void SimpleSerial::setParity(Parity parity)
+void SimpleSerial::set_parity(Parity parity)
 {
     asio::serial_port_base::parity::type parityType;
     switch(parity)
@@ -108,9 +108,9 @@ int SimpleSerial::write(std::string data)
     return asio::write(*port, asio::buffer(data, data.size()));
 }
 
-void SimpleSerial::write_line(std::string data)
+int SimpleSerial::write_line(std::string data)
 {
-    write(data + "\r\n");
+    return write(data + "\r\n");
 }
 
 std::string SimpleSerial::read(int numBytes)

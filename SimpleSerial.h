@@ -36,8 +36,11 @@ public:
             FlowControl flowControl = FLOW_CONTROL_NONE);
     void close();
 
+    // Write methods
     int write(std::string data);
-    void write_line(std::string data);
+    int write_line(std::string data);
+
+    // Read methods
     std::string read(int numBytes);
     std::string read_line();
 
@@ -47,9 +50,9 @@ public:
     void flush_both_buffers();
 
     // Serial communication settings
-    void setFlowControl(FlowControl flowControl);
-    void setStopBits(StopBits stopBits);
-    void setParity(Parity parity);
+    void set_flow_control(FlowControl flowControl);
+    void set_stop_bits(StopBits stopBits);
+    void set_parity(Parity parity);
 
 
 private:
