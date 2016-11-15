@@ -17,9 +17,43 @@ void SimpleSerial::open(std::string portName, long baud, ByteSize byteSize,
     set_flow_control(flowControl);
 }
 
+void SimpleSerial::close()
+{
+    port->close();
+}
+
 bool SimpleSerial::is_open()
 {
     return port->is_open();
+}
+
+int SimpleSerial::write(std::string data)
+{
+    return asio::write(*port, asio::buffer(data, data.size()));
+}
+
+int SimpleSerial::write_line(std::string data)
+{
+    return write(data + "\r\n");
+}
+
+std::string SimpleSerial::read(int numBytes)
+{
+    char data[numBytes];
+    asio::read(*port, asio::buffer(&data,numBytes));
+    return data;
+}
+
+std::string SimpleSerial::read_line() {
+    std::string str;
+    char c;
+    while(c != '\n')
+    {
+        c = char(read(1)[0]);
+        str += c;
+    }
+
+    return str;
 }
 
 void SimpleSerial::set_byte_size(ByteSize byteSize)
@@ -109,26 +143,6 @@ void SimpleSerial::set_parity(Parity parity)
     port->set_option(asio::serial_port_base::parity(parityType));
 }
 
-void SimpleSerial::close()
-{
-    port->close();
-}
-
-void SimpleSerial::flush_receive_buffer()
-{
-    flush(TCIFLUSH);
-}
-
-void SimpleSerial::flush_send_buffer()
-{
-    flush(TCOFLUSH);
-}
-
-void SimpleSerial::flush_both_buffers()
-{
-    flush(TCIOFLUSH);
-}
-
 void SimpleSerial::flush(int flushBuffer)
 {
     system::error_code error;
@@ -144,32 +158,18 @@ void SimpleSerial::flush(int flushBuffer)
     }
 }
 
-int SimpleSerial::write(std::string data)
+void SimpleSerial::flush_receive_buffer()
 {
-    return asio::write(*port, asio::buffer(data, data.size()));
+    flush(TCIFLUSH);
 }
 
-int SimpleSerial::write_line(std::string data)
+void SimpleSerial::flush_send_buffer()
 {
-    return write(data + "\r\n");
+    flush(TCOFLUSH);
 }
 
-std::string SimpleSerial::read(int numBytes)
+void SimpleSerial::flush_both_buffers()
 {
-    char data[numBytes];
-    asio::read(*port, asio::buffer(&data,numBytes));
-    return data;
-}
-
-std::string SimpleSerial::read_line() {
-    std::string str;
-    char c;
-    while(c != '\n')
-    {
-        c = char(read(1)[0]);
-        str += c;
-    }
-
-    return str;
+    flush(TCIOFLUSH);
 }
 
