@@ -23,10 +23,17 @@ enum FlowControl {
     FLOW_CONTROL_HARDWARE
 };
 
+enum ByteSize {
+    FIVE_BITS,
+    SIX_BITS,
+    SEVEN_BITS,
+    EIGHT_BITS
+};
+
 class SimpleSerial {
 
 public:
-    void open(std::string portName, long baud = 9600, int byteSize = 8, 
+    void open(std::string portName, long baud = 9600, ByteSize byteSize = EIGHT_BITS,
             Parity parity = PARITY_NONE, StopBits stopBits = STOPBITS_ONE,
             FlowControl flowControl = FLOW_CONTROL_NONE);
     void close();
@@ -49,6 +56,7 @@ public:
     void set_flow_control(FlowControl flowControl);
     void set_stop_bits(StopBits stopBits);
     void set_parity(Parity parity);
+    void set_byte_size(ByteSize byteSize);
 
 private:
     void flush(int flushBuffer);

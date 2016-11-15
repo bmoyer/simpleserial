@@ -2,7 +2,7 @@
 
 using namespace boost;
 
-void SimpleSerial::open(std::string portName, long baud, int byteSize, 
+void SimpleSerial::open(std::string portName, long baud, ByteSize byteSize, 
         Parity parity, StopBits stopBits,
         FlowControl flowControl)
 {
@@ -11,7 +11,7 @@ void SimpleSerial::open(std::string portName, long baud, int byteSize,
 
     // Set all serial port properties
     port->set_option(asio::serial_port_base::baud_rate(baud));
-    port->set_option(asio::serial_port_base::character_size(byteSize));
+    set_byte_size(byteSize);
     set_parity(parity);
     set_stop_bits(stopBits);
     set_flow_control(flowControl);
@@ -20,6 +20,30 @@ void SimpleSerial::open(std::string portName, long baud, int byteSize,
 bool SimpleSerial::is_open()
 {
     return port->is_open();
+}
+
+void SimpleSerial::set_byte_size(ByteSize byteSize)
+{
+    int bitsPerByte;
+    switch(byteSize)
+    {
+        case FIVE_BITS:
+            bitsPerByte = 5;
+            break;
+        case SIX_BITS:
+            bitsPerByte = 6;
+            break;
+        case SEVEN_BITS:
+            bitsPerByte = 7;
+            break;
+        case EIGHT_BITS:
+            bitsPerByte = 8;
+            break;
+        default:
+            assert(0); // invalid byte size!
+            break;
+    }
+    port->set_option(asio::serial_port_base::character_size(bitsPerByte));
 }
 
 void SimpleSerial::set_flow_control(FlowControl flowControl)
