@@ -116,6 +116,7 @@ void SimpleSerial::flush(int flushBuffer)
     {
         error = system::error_code(errno,
                 asio::error::get_system_category());
+        throw std::runtime_error("Failed to flush serial port: " + error.message());
     }
 }
 
