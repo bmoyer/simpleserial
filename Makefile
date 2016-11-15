@@ -11,7 +11,7 @@ example: example.o SimpleSerial.o
 example.o: example.cpp
 	    g++ -c example.cpp $(CXXFLAGS)
 
-SimpleSerial.o: 
+SimpleSerial.o: SimpleSerial.cpp SimpleSerial.h
 	    g++ -c SimpleSerial.cpp $(LDFLAGS) $(CXXFLAGS)
 
 clean:
