@@ -142,7 +142,7 @@ std::string SimpleSerial::read_line() {
     char c;
     while(c != '\n')
     {
-        asio::read(*port, asio::buffer(&c,1));
+        c = char(read(1)[0]);
         str += c;
     }
 
